@@ -1,7 +1,10 @@
+if (process.env.NODE_ENV !== "production") {
+  require('dotenv').config();
+}
 const mongoose = require('mongoose');
 const Seat = require('../models/Seat');
 
-const mongoURI = 'mongodb://localhost:27017/unstop'; // Replace with your MongoDB URI
+const mongoURI = process.env.MONGODB_URI
 
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))

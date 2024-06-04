@@ -1,5 +1,3 @@
-// backend/controllers/reservationController.js
-
 const Seat = require('../models/Seat');
 
 const reserveSeats = async (req, res) => {
@@ -27,7 +25,8 @@ const reserveSeats = async (req, res) => {
           count: { $sum: 1 }
         }
       },
-      { $sort: { _id: 1 } } // Sort rows by rowNumber
+      // Sort rows by rowNumber
+      { $sort: { _id: 1 } } 
     ]);
 
     // Try to reserve seats in one row if possible
@@ -38,20 +37,18 @@ const reserveSeats = async (req, res) => {
         break;
       }
     }
-
-    // If not enough seats in one row, reserve nearby seats
+    // If not enough seats in one row, reserve available seats
     if (reservedSeats.length === 0) {
       const availableSeats = await Seat.find({ isReserved: false }).limit(numSeats);
       reservedSeats = availableSeats.map(seat => seat._id);
     }
-
-    // Fetch the reserved seat details for logging
+    // Fetching the reserved seat details for logging
     const reservedSeatDetails = await Seat.find({ _id: { $in: reservedSeats } });
 
     // Update reserved seats in the database
     await Seat.updateMany({ _id: { $in: reservedSeats } }, { isReserved: true, bookedBy });
 
-    // Log the reserved seats
+    // Logging the reserved seats
     reservedSeatDetails.forEach(seat => {
       console.log(`Reserved Row: ${seat.rowNumber}, Seat: ${seat.seatNumber}`);
     });
@@ -63,6 +60,21 @@ const reserveSeats = async (req, res) => {
   }
 };
 
+const countSeats = async (req, res) => {
+  try {
+    const availableSeatsCount = await Seat.countDocuments({ isReserved: false });
+    const bookedSeatsCount = await Seat.countDocuments({ isReserved: true });
+    res.json({
+      availableSeatsCount,
+      bookedSeatsCount
+    });
+  } catch (error) {
+    console.error('Error counting seats:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   reserveSeats,
+  countSeats
 };
