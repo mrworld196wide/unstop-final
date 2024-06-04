@@ -96,7 +96,25 @@ const countSeats = async (req, res) => {
   }
 };
 
+const getAllSeats = async (req, res) => {
+  try {
+    const seats = await Seat.find();
+
+    // Calculating actual seat position and adding isReserved property
+    const seatsWithPosition = seats.map(seat => ({
+      CoachPosition: (7 * (seat.rowNumber - 1)) + seat.seatNumber,
+      isReserved: seat.isReserved
+    }));
+
+    res.json(seatsWithPosition);
+  } catch (error) {
+    console.error("Error fetching seats:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   reserveSeats,
   countSeats,
+  getAllSeats
 };
