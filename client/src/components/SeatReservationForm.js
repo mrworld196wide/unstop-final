@@ -70,17 +70,17 @@ const SeatReservationForm = () => {
         return;
       }
 
-      // Make API request to reserve seats
+      // Making API request to reserve seats
       const response = await axios.post("https://unstop-final.onrender.com/api/reserve", {
         numSeats: seatCount,
         bookedBy: reservedBy,
       });
 
-      // Update seat availability
+      // Updating seat availability
       setAvailableSeatsCount(availableSeatsCount - seatCount);
       setBookedSeatsCount(parseInt(bookedSeatsCount) + parseInt(seatCount));
 
-      // Format the reserved seats for the alert
+      // Formatting the reserved seats for the alert
       const reservedSeatsFormatted = response.data.reservedSeats
         .map((seat) => `${7 * (seat.rowNumber - 1) + seat.seatNumber}`)
         .join(", ");

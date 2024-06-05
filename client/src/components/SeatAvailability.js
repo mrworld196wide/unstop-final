@@ -5,6 +5,7 @@ const SeatAvailability = ({ availableSeatsCount, bookedSeatsCount }) => {
   const [seatsData, setSeatsData] = useState([]);
 
   useEffect(() => {
+    // Fetching seat number and there isReserved value from the server
     const fetchData = async () => {
       try {
         const response = await fetch("https://unstop-final.onrender.com/api/seats");
@@ -17,7 +18,6 @@ const SeatAvailability = ({ availableSeatsCount, bookedSeatsCount }) => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, [availableSeatsCount, bookedSeatsCount]);
 

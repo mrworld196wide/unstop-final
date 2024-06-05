@@ -15,7 +15,7 @@ const seedSeats = async () => {
     // Clear existing seats
     await Seat.deleteMany();
 
-    // Seed 80 seats: 11 rows of 7 seats and the last row of 3 seats
+    // Seeding 80 seats: 11 rows of 7 seats and the last row of 3 seats
     const seats = [];
     for (let row = 1; row <= 12; row++) {
       let seatsInRow = row === 12 ? 3 : 7;

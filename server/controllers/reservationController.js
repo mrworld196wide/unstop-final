@@ -2,16 +2,18 @@ const Seat = require("../models/Seat");
 
 const reserveSeats = async (req, res) => {
   const { numSeats, bookedBy } = req.body;
+  //checking if the number of seats is more than 7 or not
   if (numSeats > 7) {
     return res
       .status(400)
       .json({ error: "Cannot reserve more than 7 seats at a time" });
   }
   try {
-    // Check the total number of available seats
+    // Checking the total number of available seats
     const availableSeatsCount = await Seat.countDocuments({
       isReserved: false,
     });
+    //Checking  if available seats is less than number of seats to be booked
     if (availableSeatsCount < numSeats) {
       return res
         .status(400)
@@ -22,7 +24,7 @@ const reserveSeats = async (req, res) => {
 
     let reservedSeats = [];
 
-    // Find rows with available seats and their counts
+    // Finding rows with available seats and their counts
     const rows = await Seat.aggregate([
       { $match: { isReserved: false } },
       {
@@ -36,7 +38,7 @@ const reserveSeats = async (req, res) => {
       { $sort: { _id: 1 } },
     ]);
 
-    // Try to reserve seats in one row if possible
+    // Trying to reserve seats in one row if possible
     for (const row of rows) {
       if (row.count >= numSeats) {
         const seatIds = row.seats.slice(0, numSeats).map((seat) => seat._id);
@@ -56,7 +58,7 @@ const reserveSeats = async (req, res) => {
       _id: { $in: reservedSeats },
     });
 
-    // Update reserved seats in the database
+    // Updating reserved seats in the database
     await Seat.updateMany(
       { _id: { $in: reservedSeats } },
       { isReserved: true, bookedBy }
@@ -81,6 +83,7 @@ const reserveSeats = async (req, res) => {
 };
 
 const countSeats = async (req, res) => {
+  // Getting the count of available and booked seats
   try {
     const availableSeatsCount = await Seat.countDocuments({
       isReserved: false,
@@ -97,6 +100,7 @@ const countSeats = async (req, res) => {
 };
 
 const getAllSeats = async (req, res) => {
+  // Getting all the seats and there isReserved value
   try {
     const seats = await Seat.find();
 
