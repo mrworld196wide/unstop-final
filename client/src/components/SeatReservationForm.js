@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
-
+import SeatAvailability from "./SeatAvailability";
 const SeatReservationForm = () => {
   const [seatCount, setSeatCount] = useState("");
   const [reservedBy, setReservedBy] = useState("");
@@ -45,7 +45,7 @@ const SeatReservationForm = () => {
 
   //It clears error message when seatCount changes
   useEffect(() => {
-    setError(""); 
+    setError("");
   }, [seatCount]);
 
   const handleSeatCountChange = (event) => {
@@ -82,10 +82,7 @@ const SeatReservationForm = () => {
 
       // Format the reserved seats for the alert
       const reservedSeatsFormatted = response.data.reservedSeats
-        .map(
-          (seat) =>
-            `${7 * (seat.rowNumber - 1) + seat.seatNumber}`
-        )
+        .map((seat) => `${7 * (seat.rowNumber - 1) + seat.seatNumber}`)
         .join(", ");
 
       setSuccessMessage(`Reserved Seat Numbers: ${reservedSeatsFormatted}`);
@@ -115,154 +112,159 @@ const SeatReservationForm = () => {
       lg={12}
       xl={12}
       sx={{
-        py: "5%",
+        py: "1%",
       }}
     >
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        xl={12}
-        sx={{ py: "0.5%", display: "flex", justifyContent: "center" }}
-      >
-        {successMessage && (
-          <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
-            {successMessage}
-          </Alert>
-        )}
-        {errorMessage && (
-          <Alert icon={<ErrorIcon fontSize="inherit" />} severity="error">
-            {errorMessage}
-          </Alert>
-        )}
+      <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+        <SeatAvailability availableSeatsCount={availableSeatsCount} bookedSeatsCount={bookedSeatsCount}/>
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        xl={12}
-        sx={{ py: "3%", display: "flex", justifyContent: "center" }}
-      >
-        <Box
-          sx={{
-            borderRadius: "10px",
-            padding: "20px",
-            border: "2px solid #ccc",
-            width: "50%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            bgcolor: "black",
-          }}
+      <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          xl={12}
+          sx={{ py: "0.5%", display: "flex", justifyContent: "center" }}
+        >
+          {successMessage && (
+            <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+              {successMessage}
+            </Alert>
+          )}
+          {errorMessage && (
+            <Alert icon={<ErrorIcon fontSize="inherit" />} severity="error">
+              {errorMessage}
+            </Alert>
+          )}
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          xl={12}
+          sx={{ py: "3%", display: "flex", justifyContent: "center" }}
         >
           <Box
             sx={{
               borderRadius: "10px",
               padding: "20px",
               border: "2px solid #ccc",
-              width: "80%",
-              my: "4%",
-              bgcolor: "white",
+              width: "50%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              bgcolor: "black",
             }}
           >
-            <Typography variant="h6" textAlign={"center"}>
-              Total Seats: 80
-            </Typography>
+            <Box
+              sx={{
+                borderRadius: "10px",
+                padding: "20px",
+                border: "2px solid #ccc",
+                width: "80%",
+                my: "4%",
+                bgcolor: "white",
+              }}
+            >
+              <Typography variant="h6" textAlign={"center"}>
+                Total Seats: 80
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                borderRadius: "10px",
+                padding: "20px",
+                border: "2px solid #ccc",
+                width: "80%",
+                my: "4%",
+                bgcolor: "white",
+              }}
+            >
+              <Typography variant="h6" textAlign={"center"}>
+                Booked Seats: {bookedSeatsCount}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                borderRadius: "10px",
+                padding: "20px",
+                border: "2px solid #ccc",
+                width: "80%",
+                my: "4%",
+                bgcolor: "white",
+              }}
+            >
+              <Typography variant="h6" textAlign={"center"}>
+                Available Seats: {availableSeatsCount}
+              </Typography>
+            </Box>
           </Box>
-          <Box
-            sx={{
-              borderRadius: "10px",
-              padding: "20px",
-              border: "2px solid #ccc",
-              width: "80%",
-              my: "4%",
-              bgcolor: "white",
-            }}
-          >
-            <Typography variant="h6" textAlign={"center"}>
-              Booked Seats: {bookedSeatsCount}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              borderRadius: "10px",
-              padding: "20px",
-              border: "2px solid #ccc",
-              width: "80%",
-              my: "4%",
-              bgcolor: "white",
-            }}
-          >
-            <Typography variant="h6" textAlign={"center"}>
-              Available Seats: {availableSeatsCount}
-            </Typography>
-          </Box>
-        </Box>
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        xl={12}
-        sx={{ textAlign: "center" }}
-      >
-        <TextField
-          className="seatsToReserve"
-          id="outlined-basic"
-          type="number"
-          label="Seats to Reserve"
-          variant="outlined"
-          value={seatCount}
-          onChange={handleSeatCountChange}
-          inputProps={{ min: "0" }}
-          error={!!error}
-          helperText={error}
-          sx={{ width: "50%", my: "2%" }}
-        />
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        xl={12}
-        sx={{ textAlign: "center" }}
-      >
-        <TextField
-          className="reservedBy"
-          id="outlined-basic"
-          type="string"
-          label="Reserved By"
-          variant="outlined"
-          value={reservedBy}
-          onChange={handleReservedByChange}
-          sx={{ width: "50%", my: "2%" }}
-        />
-      </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={12}
-        lg={12}
-        xl={12}
-        sx={{ textAlign: "center" }}
-      >
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={!seatCount || !reservedBy}
-          sx={{ my: "0.6%" }}
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          xl={12}
+          sx={{ textAlign: "center" }}
         >
-          Book
-        </Button>
+          <TextField
+            className="seatsToReserve"
+            id="outlined-basic"
+            type="number"
+            label="Seats to Reserve"
+            variant="outlined"
+            value={seatCount}
+            onChange={handleSeatCountChange}
+            inputProps={{ min: "0" }}
+            error={!!error}
+            helperText={error}
+            sx={{ width: "50%", my: "2%" }}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          xl={12}
+          sx={{ textAlign: "center" }}
+        >
+          <TextField
+            className="reservedBy"
+            id="outlined-basic"
+            type="string"
+            label="Reserved By"
+            variant="outlined"
+            value={reservedBy}
+            onChange={handleReservedByChange}
+            sx={{ width: "50%", my: "2%" }}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={12}
+          lg={12}
+          xl={12}
+          sx={{ textAlign: "center" }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={!seatCount || !reservedBy}
+            sx={{ my: "0.6%" }}
+          >
+            Book
+          </Button>
+        </Grid>
       </Grid>
     </Grid>
   );

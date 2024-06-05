@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Box, Typography } from "@mui/material";
 
-const SeatAvailability = () => {
+const SeatAvailability = ({ availableSeatsCount, bookedSeatsCount }) => {
   const [seatsData, setSeatsData] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const SeatAvailability = () => {
     };
 
     fetchData();
-  }, []);
+  }, [availableSeatsCount, bookedSeatsCount]);
 
   return (
     <Grid
@@ -29,7 +29,7 @@ const SeatAvailability = () => {
       md={12}
       lg={12}
       xl={12}
-      sx={{ py: "2%", display: "flex", justifyContent: "center", mt: "4.5%" }}
+      sx={{justifyContent: "center", mt: "4.5%" }}
     >
       <Box
         sx={{
