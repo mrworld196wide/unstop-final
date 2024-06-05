@@ -31,7 +31,7 @@ const SeatReservationForm = () => {
     const fetchSeatAvailability = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/availability"
+          "https://unstop-final.onrender.com/api/availability"
         );
         setAvailableSeatsCount(response.data.availableSeatsCount);
         setBookedSeatsCount(response.data.bookedSeatsCount);
@@ -71,7 +71,7 @@ const SeatReservationForm = () => {
       }
 
       // Make API request to reserve seats
-      const response = await axios.post("http://localhost:5000/api/reserve", {
+      const response = await axios.post("https://unstop-final.onrender.com/api/reserve", {
         numSeats: seatCount,
         bookedBy: reservedBy,
       });
